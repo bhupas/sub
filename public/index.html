@@ -3,251 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Application Tracker</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>JobTrackr - Simplify Your Job Search</title>
+  <link rel="stylesheet" href="css/landing.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-  <div id="app">
-    <!-- Auth Container (Login/Register) -->
-    <div id="auth-container" class="container">
-      <div class="auth-form">
-        <h1>Job Application Tracker</h1>
-        <div class="tabs">
-          <button id="login-tab" class="tab active">Login</button>
-          <button id="register-tab" class="tab">Register</button>
+  <div class="landing-container">
+    <!-- Hero Section -->
+    <header class="hero">
+      <nav class="navbar">
+        <div class="logo">
+          <i class="fas fa-briefcase"></i> JobTrackr
         </div>
-        
-        <!-- Login Form -->
-        <form id="login-form" class="form">
-          <div class="form-group">
-            <label for="login-email">Email</label>
-            <input type="email" id="login-email" required>
-          </div>
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Login</button>
-          <div id="login-error" class="error-message"></div>
-        </form>
-        
-        <!-- Register Form -->
-        <form id="register-form" class="form hidden">
-          <div class="form-group">
-            <label for="register-name">Name</label>
-            <input type="text" id="register-name" required>
-          </div>
-          <div class="form-group">
-            <label for="register-email">Email</label>
-            <input type="email" id="register-email" required>
-          </div>
-          <div class="form-group">
-            <label for="register-password">Password</label>
-            <input type="password" id="register-password" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Register</button>
-          <div id="register-error" class="error-message"></div>
-        </form>
-      </div>
-    </div>
-    
-    <!-- Main Application Container -->
-    <div id="main-container" class="container hidden">
-      <header>
-        <h1>Job Application Tracker</h1>
-        <div class="user-info">
-          <span id="user-name"></span>
-          <button id="logout-btn" class="btn btn-small">Logout</button>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="app.html" class="nav-btn">Login / Register</a>
         </div>
-      </header>
+      </nav>
       
-      <div class="dashboard">
-        <div class="dashboard-header">
-          <h2>Your Applications</h2>
-          <div class="action-buttons-container">
-            <button id="search-job-btn" class="btn btn-primary">Find Jobs</button>
-            <button id="add-application-btn" class="btn btn-primary">Add Manually</button>
-          </div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Organize Your Job Search</h1>
+          <p>Keep track of applications, interviews, and offers in one place. Never miss a follow-up again.</p>
+          <a href="app.html" class="cta-button">Get Started <i class="fas fa-arrow-right"></i></a>
         </div>
-        
-        <div class="filter-section">
-          <div class="search-box">
-            <input type="text" id="search-company" placeholder="Search by company...">
-            <button id="search-btn" class="btn">Search</button>
-          </div>
-          <div class="filter-dropdown">
-            <label for="status-filter">Filter by Status:</label>
-            <select id="status-filter">
-              <option value="">All Statuses</option>
-              <option value="Applied">Applied</option>
-              <option value="Interviewing">Interviewing</option>
-              <option value="Offer">Offer</option>
-              <option value="Rejected">Rejected</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="applications-list">
-          <table id="applications-table">
-            <thead>
-              <tr>
-                <th>Company</th>
-                <th>Job Title</th>
-                <th>Application Date</th>
-                <th>Status</th>
-                <th>Follow-up Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="applications-body">
-              <!-- Application rows will be inserted here -->
-            </tbody>
-          </table>
-          <div id="no-applications" class="hidden">No applications found. Add your first job application!</div>
+        <div class="hero-image">
+          <img src="img/dashboard-preview.png" alt="JobTrackr Dashboard Preview" class="dashboard-preview">
         </div>
       </div>
-    </div>
-    
-    <!-- Application Form Modal -->
-    <div id="application-modal" class="modal hidden">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2 id="modal-title">Add New Application</h2>
-        <form id="application-form" class="form">
-          <input type="hidden" id="application-id">
-          <div class="form-group">
-            <label for="company">Company Name*</label>
-            <input type="text" id="company" required>
-          </div>
-          <div class="form-group">
-            <label for="website">Company Website</label>
-            <input type="url" id="website" placeholder="https://company.com">
-          </div>
-          <div class="form-group">
-            <label for="job-title">Job Title*</label>
-            <input type="text" id="job-title" required>
-          </div>
-          <div class="form-group">
-            <label for="application-date">Application Date*</label>
-            <input type="date" id="application-date" required>
-          </div>
-          <div class="form-group">
-            <label for="status">Status*</label>
-            <select id="status" required>
-              <option value="Applied">Applied</option>
-              <option value="Interviewing">Interviewing</option>
-              <option value="Offer">Offer</option>
-              <option value="Rejected">Rejected</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="follow-up-date">Follow-up Date</label>
-            <input type="date" id="follow-up-date">
-          </div>
-          <div class="form-group">
-            <label for="notes">Notes</label>
-            <textarea id="notes" rows="4"></textarea>
-          </div>
-          <p class="form-note">* Required fields</p>
-          <button type="submit" class="btn btn-primary">Save</button>
-          <div id="form-error" class="error-message"></div>
-        </form>
-      </div>
-    </div>
-    
-    <!-- Job Search Modal -->
-    <div id="job-search-modal" class="modal hidden">
-      <div class="modal-content job-search-modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Search for Jobs</h2>
-        
-        <form id="job-search-form" class="form">
-          <div class="form-group">
-            <label for="job-keyword">Job Title or Keyword*</label>
-            <input type="text" id="job-keyword" required placeholder="e.g. Software Developer, Marketing, Data Analyst">
-          </div>
-          
-          <div class="form-group">
-            <label for="job-location">Location</label>
-            <input type="text" id="job-location" placeholder="City, State, or Remote">
-          </div>
-          
-          <button type="submit" class="btn btn-primary">Search Jobs</button>
-        </form>
-        
-        <div id="loading-spinner" class="spinner hidden">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
-        </div>
-        
-        <div id="job-results-container">
-          <div id="job-results-count"></div>
-          <div id="job-search-results" class="job-results-list"></div>
-          <div id="pagination-container" class="pagination"></div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Confirmation Modal -->
-    <div id="confirm-modal" class="modal hidden">
-      <div class="modal-content">
-        <h2>Confirm Delete</h2>
-        <p>Are you sure you want to delete this application?</p>
-        <div class="modal-actions">
-          <button id="confirm-delete" class="btn btn-danger">Delete</button>
-          <button id="cancel-delete" class="btn">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- Updated Job Search Modal -->
-<div id="job-search-modal" class="modal hidden">
-  <div class="modal-content job-search-modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Search for Jobs</h2>
-    
-    <form id="job-search-form" class="form">
-      <div class="form-group">
-        <label for="job-keyword">Job Title or Keyword*</label>
-        <input type="text" id="job-keyword" required placeholder="e.g. Software Developer, Marketing, Data Analyst">
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <h2>Why Use JobTrackr?</h2>
+      <div class="feature-cards">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>Job Search Integration</h3>
+          <p>Find and track job listings from multiple sources without leaving the app.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <h3>Application Tracking</h3>
+          <p>Monitor the status of every application from submission to offer.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3>Follow-up Reminders</h3>
+          <p>Set reminders for follow-ups and never miss an opportunity to connect.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Progress Insights</h3>
+          <p>Visualize your job search progress and identify improvement areas.</p>
+        </div>
       </div>
-      
-      <div class="form-group">
-        <label for="job-location">Location</label>
-        <input type="text" id="job-location" placeholder="City, State, or Remote">
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Create Your Account</h3>
+          <p>Sign up in seconds with just your name, email, and password.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Search for Jobs</h3>
+          <p>Use our integrated job search to find opportunities matching your skills.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Track Applications</h3>
+          <p>Save jobs you've applied to and update their status as you progress.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Land Your Dream Job</h3>
+          <p>Stay organized through the entire process until you receive an offer.</p>
+        </div>
       </div>
-      
-      <button type="submit" class="btn btn-primary">Search Jobs</button>
-    </form>
-    
-    <!-- Location filter will be inserted here by JavaScript -->
-    <div id="location-filter-container" class="form-group hidden">
-      <label for="location-filter">Filter by Location:</label>
-      <select id="location-filter">
-        <option value="">All Locations</option>
-      </select>
-    </div>
-    
-    <div id="loading-spinner" class="spinner hidden">
-      <div class="bounce1"></div>
-      <div class="bounce2"></div>
-      <div class="bounce3"></div>
-    </div>
-    
-    <div id="job-results-container">
-      <div id="job-results-count"></div>
-      <div id="job-search-results" class="job-results-list"></div>
-      <div id="pagination-container" class="pagination"></div>
-    </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Ready to Simplify Your Job Search?</h2>
+        <p>Join thousands of job seekers who stay organized with JobTrackr.</p>
+        <a href="app.html" class="cta-button">Get Started Now</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-briefcase"></i> JobTrackr
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact Us</a>
+        </div>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 JobTrackr. All rights reserved.</p>
+      </div>
+    </footer>
   </div>
-</div>
-  
-  <script src="js/auth.js"></script>
-  <script src="js/applications.js"></script>
-  <script src="js/jobSearch.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>
