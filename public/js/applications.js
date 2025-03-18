@@ -27,7 +27,8 @@ async function loadApplications() {
     const response = await fetch('/api/applications');
     
     if (!response.ok) {
-      throw new Error('Failed to load applications');
+      const errorData = await response.json();
+      throw new Error(errorData.msg || 'Failed to load applications');
     }
     
     applications = await response.json();
@@ -61,9 +62,15 @@ function renderApplications(apps) {
     const applicationDate = new Date(app.applicationDate).toLocaleDateString();
     const followUpDate = app.followUpDate ? new Date(app.followUpDate).toLocaleDateString() : 'N/A';
     
+    // Create company cell with website link if available
+    let companyCell = app.company;
+    if (app.website) {
+      companyCell = `<a href="${app.website}" target="_blank" title="Visit company website">${app.company} <i class="fas fa-external-link-alt"></i></a>`;
+    }
+    
     // Set row content
     row.innerHTML = `
-      <td>${app.company}</td>
+      <td>${companyCell}</td>
       <td>${app.jobTitle}</td>
       <td>${applicationDate}</td>
       <td>
@@ -129,6 +136,13 @@ function openEditModal(id) {
   // Fill form with application data
   document.getElementById('application-id').value = application._id;
   document.getElementById('company').value = application.company;
+  
+  // Handle website field (which might be new)
+  const websiteEl = document.getElementById('website');
+  if (websiteEl) {
+    websiteEl.value = application.website || '';
+  }
+  
   document.getElementById('job-title').value = application.jobTitle;
   
   // Format dates for input fields
@@ -169,17 +183,53 @@ function openDeleteModal(id) {
 async function saveApplication(e) {
   e.preventDefault();
   
-  // Get form data
-  const applicationData = {
-    company: document.getElementById('company').value,
-    jobTitle: document.getElementById('job-title').value,
-    applicationDate: document.getElementById('application-date').value,
-    status: document.getElementById('status').value,
-    followUpDate: document.getElementById('follow-up-date').value || null,
-    notes: document.getElementById('notes').value
-  };
-  
   try {
+    // Clear error message
+    formError.textContent = '';
+    
+    // Get form elements safely
+    const companyEl = document.getElementById('company');
+    const websiteEl = document.getElementById('website');
+    const jobTitleEl = document.getElementById('job-title');
+    const applicationDateEl = document.getElementById('application-date');
+    const statusEl = document.getElementById('status');
+    const followUpDateEl = document.getElementById('follow-up-date');
+    const notesEl = document.getElementById('notes');
+    
+    // Log for debugging
+    console.log('Form elements found:', {
+      company: !!companyEl,
+      website: !!websiteEl,
+      jobTitle: !!jobTitleEl,
+      applicationDate: !!applicationDateEl,
+      status: !!statusEl,
+      followUpDate: !!followUpDateEl,
+      notes: !!notesEl
+    });
+    
+    // Create application data safely
+    const applicationData = {
+      company: companyEl ? companyEl.value : '',
+      website: websiteEl ? websiteEl.value : '',
+      jobTitle: jobTitleEl ? jobTitleEl.value : '',
+      applicationDate: applicationDateEl ? applicationDateEl.value : '',
+      status: statusEl ? statusEl.value : 'Applied',
+      followUpDate: followUpDateEl && followUpDateEl.value ? followUpDateEl.value : null,
+      notes: notesEl ? notesEl.value : ''
+    };
+    
+    // Validate required fields
+    if (!applicationData.company || !applicationData.jobTitle || !applicationData.applicationDate || !applicationData.status) {
+      throw new Error('Please fill in all required fields');
+    }
+    
+    // Validate website format if entered
+    if (applicationData.website && !isValidUrl(applicationData.website)) {
+      throw new Error('Please enter a valid website URL (e.g., https://example.com)');
+    }
+    
+    console.log('Submitting application data:', applicationData);
+    
     let response;
     
     if (currentApplicationId) {
@@ -203,8 +253,8 @@ async function saveApplication(e) {
     }
     
     if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.msg || 'Failed to save application');
+      const errorData = await response.json();
+      throw new Error(errorData.msg || 'Failed to save application');
     }
     
     // Reload applications
@@ -213,7 +263,19 @@ async function saveApplication(e) {
     // Close modal
     applicationModal.classList.add('hidden');
   } catch (error) {
+    // Display error message
     formError.textContent = error.message;
+    console.error('Save error:', error);
+  }
+}
+
+// Helper function to validate URL
+function isValidUrl(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
   }
 }
 

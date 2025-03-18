@@ -10,6 +10,9 @@ const ApplicationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  website: {
+    type: String
+  },
   jobTitle: {
     type: String,
     required: true

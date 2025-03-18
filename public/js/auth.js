@@ -63,8 +63,10 @@ registerForm.addEventListener('submit', async (e) => {
     mainContainer.classList.remove('hidden');
     
     // Load applications
-    if (typeof loadApplications === 'function') {
-      loadApplications();
+    if (window.applications && typeof window.applications.loadApplications === 'function') {
+      window.applications.loadApplications();
+    } else {
+      console.error('loadApplications function not found');
     }
   } catch (error) {
     registerError.textContent = error.message;
@@ -106,8 +108,10 @@ loginForm.addEventListener('submit', async (e) => {
     mainContainer.classList.remove('hidden');
     
     // Load applications
-    if (typeof loadApplications === 'function') {
-      loadApplications();
+    if (window.applications && typeof window.applications.loadApplications === 'function') {
+      window.applications.loadApplications();
+    } else {
+      console.error('loadApplications function not found');
     }
   } catch (error) {
     loginError.textContent = error.message;
@@ -166,8 +170,10 @@ function checkAuth() {
         mainContainer.classList.remove('hidden');
         
         // Load applications
-        if (typeof loadApplications === 'function') {
-          loadApplications();
+        if (window.applications && typeof window.applications.loadApplications === 'function') {
+          window.applications.loadApplications();
+        } else {
+          console.error('loadApplications function not found');
         }
       })
       .catch(error => {
