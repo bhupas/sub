@@ -467,8 +467,117 @@ table tr:hover {
   }
 }
 
+/* Location filter styles */
+#location-filter-container {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+#location-filter {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Improve job description text in cards */
+.job-description {
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Notes field in modal should preserve formatting */
+#notes {
+  white-space: pre-wrap;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Make add job button more prominent */
+.add-job-btn {
+  font-weight: 500;
+}
+
+/* Add a "new" badge to jobs posted in the last 3 days */
+.job-new-badge {
+  display: inline-block;
+  background-color: #4a6fa5;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 /* Add button in dashboard */
 .action-buttons-container {
   display: flex;
   gap: 10px;
+}
+
+/* Location filter styles */
+#location-filter-container {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+#location-filter {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Improve job description text in cards */
+.job-description {
+  white-space: pre-line;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+/* Make job cards more attractive */
+.job-card {
+  transition: all 0.2s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.job-title {
+  color: #4a6fa5;
+}
+
+.job-company {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.job-location {
+  display: inline-block;
+  background-color: #e8eef3;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+/* Make add job button more prominent */
+.add-job-btn {
+  font-weight: 500;
 }

@@ -54,12 +54,17 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // @desc    Create a new application
 // @access  Private
 router.post('/', isAuthenticated, async (req, res) => {
-  const { company, jobTitle, applicationDate, status, followUpDate, notes } = req.body;
+  // Log the request body for debugging
+  console.log('Request body:', req.body);
+  
+  const { company, website, jobTitle, applicationDate, status, followUpDate, notes } = req.body;
   
   try {
+    // Create new application with explicit fields
     const newApplication = new Application({
       user: req.session.user.id,
       company,
+      website, // Include website field explicitly
       jobTitle,
       applicationDate,
       status,
@@ -67,10 +72,17 @@ router.post('/', isAuthenticated, async (req, res) => {
       notes
     });
     
+    // Log the application before saving
+    console.log('New application to save:', newApplication);
+    
     const application = await newApplication.save();
+    
+    // Log the saved application
+    console.log('Saved application:', application);
+    
     res.json(application);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error saving application:', err.message);
     res.status(500).send('Server error');
   }
 });

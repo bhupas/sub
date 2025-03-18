@@ -202,6 +202,48 @@
       </div>
     </div>
   </div>
+
+  <!-- Updated Job Search Modal -->
+<div id="job-search-modal" class="modal hidden">
+  <div class="modal-content job-search-modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Search for Jobs</h2>
+    
+    <form id="job-search-form" class="form">
+      <div class="form-group">
+        <label for="job-keyword">Job Title or Keyword*</label>
+        <input type="text" id="job-keyword" required placeholder="e.g. Software Developer, Marketing, Data Analyst">
+      </div>
+      
+      <div class="form-group">
+        <label for="job-location">Location</label>
+        <input type="text" id="job-location" placeholder="City, State, or Remote">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Search Jobs</button>
+    </form>
+    
+    <!-- Location filter will be inserted here by JavaScript -->
+    <div id="location-filter-container" class="form-group hidden">
+      <label for="location-filter">Filter by Location:</label>
+      <select id="location-filter">
+        <option value="">All Locations</option>
+      </select>
+    </div>
+    
+    <div id="loading-spinner" class="spinner hidden">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    
+    <div id="job-results-container">
+      <div id="job-results-count"></div>
+      <div id="job-search-results" class="job-results-list"></div>
+      <div id="pagination-container" class="pagination"></div>
+    </div>
+  </div>
+</div>
   
   <script src="js/auth.js"></script>
   <script src="js/applications.js"></script>
