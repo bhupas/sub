@@ -342,3 +342,133 @@ table tr:hover {
     display: none;
   }
 }
+
+/* Job Search Styles */
+.job-search-modal-content {
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.job-results-list {
+  margin-top: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.job-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.job-title {
+  font-size: 18px;
+  color: #4a6fa5;
+  margin-bottom: 8px;
+}
+
+.job-company {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.job-location {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.job-posted {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.job-description {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.job-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#job-results-count {
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.no-results {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.pagination-info {
+  font-size: 14px;
+}
+
+.pagination-btn {
+  min-width: 80px;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner */
+.spinner {
+  margin: 20px auto;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #4a6fa5;
+  border-radius: 100%;
+  display: inline-block;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1.0);
+  }
+}
+
+/* Add button in dashboard */
+.action-buttons-container {
+  display: flex;
+  gap: 10px;
+}

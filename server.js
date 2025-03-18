@@ -40,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/applications', require('./routes/applications'));
+app.use('/api/jobs', require('./routes/jobs')); // Add the new jobs routes
 
 // Serve the main index file for any other route
 app.get('*', (req, res) => {

@@ -2,9 +2,29 @@
 
 // Initialize application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM fully loaded");
+  
   // Check if user is logged in
   if (typeof window.auth !== 'undefined' && typeof window.auth.checkAuth === 'function') {
+    console.log("Initializing auth");
     window.auth.checkAuth();
+  }
+  
+  // Initialize job search functionality
+  if (typeof window.jobSearch !== 'undefined' && typeof window.jobSearch.init === 'function') {
+    console.log("Initializing job search");
+    window.jobSearch.init();
+  } else {
+    console.log("Job search not available yet, will try again in 500ms");
+    // Try again after a short delay
+    setTimeout(() => {
+      if (typeof window.jobSearch !== 'undefined' && typeof window.jobSearch.init === 'function') {
+        console.log("Initializing job search (delayed)");
+        window.jobSearch.init();
+      } else {
+        console.error("Job search module not found after delay");
+      }
+    }, 500);
   }
   
   // Add status badge styling

@@ -65,7 +65,10 @@
       <div class="dashboard">
         <div class="dashboard-header">
           <h2>Your Applications</h2>
-          <button id="add-application-btn" class="btn btn-primary">Add New Application</button>
+          <div class="action-buttons-container">
+            <button id="search-job-btn" class="btn btn-primary">Find Jobs</button>
+            <button id="add-application-btn" class="btn btn-primary">Add Manually</button>
+          </div>
         </div>
         
         <div class="filter-section">
@@ -107,52 +110,85 @@
     </div>
     
     <!-- Application Form Modal -->
-    <!-- Application Form Modal -->
-<div id="application-modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2 id="modal-title">Add New Application</h2>
-    <form id="application-form" class="form">
-      <input type="hidden" id="application-id">
-      <div class="form-group">
-        <label for="company">Company Name*</label>
-        <input type="text" id="company" required>
+    <div id="application-modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title">Add New Application</h2>
+        <form id="application-form" class="form">
+          <input type="hidden" id="application-id">
+          <div class="form-group">
+            <label for="company">Company Name*</label>
+            <input type="text" id="company" required>
+          </div>
+          <div class="form-group">
+            <label for="website">Company Website</label>
+            <input type="url" id="website" placeholder="https://company.com">
+          </div>
+          <div class="form-group">
+            <label for="job-title">Job Title*</label>
+            <input type="text" id="job-title" required>
+          </div>
+          <div class="form-group">
+            <label for="application-date">Application Date*</label>
+            <input type="date" id="application-date" required>
+          </div>
+          <div class="form-group">
+            <label for="status">Status*</label>
+            <select id="status" required>
+              <option value="Applied">Applied</option>
+              <option value="Interviewing">Interviewing</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="follow-up-date">Follow-up Date</label>
+            <input type="date" id="follow-up-date">
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" rows="4"></textarea>
+          </div>
+          <p class="form-note">* Required fields</p>
+          <button type="submit" class="btn btn-primary">Save</button>
+          <div id="form-error" class="error-message"></div>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="website">Company Website</label>
-        <input type="url" id="website" placeholder="https://company.com">
+    </div>
+    
+    <!-- Job Search Modal -->
+    <div id="job-search-modal" class="modal hidden">
+      <div class="modal-content job-search-modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Search for Jobs</h2>
+        
+        <form id="job-search-form" class="form">
+          <div class="form-group">
+            <label for="job-keyword">Job Title or Keyword*</label>
+            <input type="text" id="job-keyword" required placeholder="e.g. Software Developer, Marketing, Data Analyst">
+          </div>
+          
+          <div class="form-group">
+            <label for="job-location">Location</label>
+            <input type="text" id="job-location" placeholder="City, State, or Remote">
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Search Jobs</button>
+        </form>
+        
+        <div id="loading-spinner" class="spinner hidden">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        
+        <div id="job-results-container">
+          <div id="job-results-count"></div>
+          <div id="job-search-results" class="job-results-list"></div>
+          <div id="pagination-container" class="pagination"></div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="job-title">Job Title*</label>
-        <input type="text" id="job-title" required>
-      </div>
-      <div class="form-group">
-        <label for="application-date">Application Date*</label>
-        <input type="date" id="application-date" required>
-      </div>
-      <div class="form-group">
-        <label for="status">Status*</label>
-        <select id="status" required>
-          <option value="Applied">Applied</option>
-          <option value="Interviewing">Interviewing</option>
-          <option value="Offer">Offer</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="follow-up-date">Follow-up Date</label>
-        <input type="date" id="follow-up-date">
-      </div>
-      <div class="form-group">
-        <label for="notes">Notes</label>
-        <textarea id="notes" rows="4"></textarea>
-      </div>
-      <p class="form-note">* Required fields</p>
-      <button type="submit" class="btn btn-primary">Save</button>
-      <div id="form-error" class="error-message"></div>
-    </form>
-  </div>
-</div>
+    </div>
     
     <!-- Confirmation Modal -->
     <div id="confirm-modal" class="modal hidden">
@@ -169,6 +205,7 @@
   
   <script src="js/auth.js"></script>
   <script src="js/applications.js"></script>
+  <script src="js/jobSearch.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
