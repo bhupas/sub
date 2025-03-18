@@ -17,6 +17,12 @@ const searchBtn = document.getElementById('search-btn');
 const searchCompanyInput = document.getElementById('search-company');
 const statusFilter = document.getElementById('status-filter');
 
+// Get all status count elements
+const appliedCountEl = document.getElementById('applied-count');
+const interviewingCountEl = document.getElementById('interviewing-count');
+const offerCountEl = document.getElementById('offer-count');
+const rejectedCountEl = document.getElementById('rejected-count');
+
 // Global variables
 let applications = [];
 let currentApplicationId = null;
@@ -33,9 +39,36 @@ async function loadApplications() {
     
     applications = await response.json();
     renderApplications(applications);
+    updateStatusCounts(applications);
   } catch (error) {
     console.error('Error loading applications:', error);
   }
+}
+
+// Update status summary counts
+function updateStatusCounts(apps) {
+  // Initialize counters
+  const counts = {
+    'Applied': 0,
+    'Interviewing': 0,
+    'Offer': 0,
+    'Rejected': 0
+  };
+  
+  // Count applications by status
+  apps.forEach(app => {
+    if (counts[app.status] !== undefined) {
+      counts[app.status]++;
+    }
+  });
+  
+  // Update DOM elements if they exist
+  if (appliedCountEl) appliedCountEl.textContent = counts['Applied'];
+  if (interviewingCountEl) interviewingCountEl.textContent = counts['Interviewing'];
+  if (offerCountEl) offerCountEl.textContent = counts['Offer'];
+  if (rejectedCountEl) rejectedCountEl.textContent = counts['Rejected'];
+  
+  console.log('Status counts updated:', counts);
 }
 
 // Render applications to table
@@ -196,17 +229,6 @@ async function saveApplication(e) {
     const followUpDateEl = document.getElementById('follow-up-date');
     const notesEl = document.getElementById('notes');
     
-    // Log for debugging
-    console.log('Form elements found:', {
-      company: !!companyEl,
-      website: !!websiteEl,
-      jobTitle: !!jobTitleEl,
-      applicationDate: !!applicationDateEl,
-      status: !!statusEl,
-      followUpDate: !!followUpDateEl,
-      notes: !!notesEl
-    });
-    
     // Create application data safely
     const applicationData = {
       company: companyEl ? companyEl.value : '',
@@ -227,8 +249,6 @@ async function saveApplication(e) {
     if (applicationData.website && !isValidUrl(applicationData.website)) {
       throw new Error('Please enter a valid website URL (e.g., https://example.com)');
     }
-    
-    console.log('Submitting application data:', applicationData);
     
     let response;
     
@@ -302,7 +322,6 @@ async function deleteApplication() {
 }
 
 // Filter applications
-// Filter applications
 async function filterApplications() {
   const company = searchCompanyInput.value.trim();
   const status = statusFilter.value;
@@ -328,101 +347,11 @@ async function filterApplications() {
     applications = filteredApplications;
     renderApplications(filteredApplications);
     
-    // Make sure status counts are updated with the filtered results
+    // Update status counts with the filtered results
     updateStatusCounts(filteredApplications);
   } catch (error) {
     console.error('Error filtering applications:', error);
   }
-}
-
-// Render applications to table
-function renderApplications(apps) {
-  // Clear table body
-  applicationsBody.innerHTML = '';
-  
-  if (apps.length === 0) {
-    // Show no applications message
-    applicationsTable.classList.add('hidden');
-    noApplicationsMessage.classList.remove('hidden');
-    // Update status counts even when no applications
-    updateStatusCounts([]);
-    return;
-  }
-  
-  // Show table, hide message
-  applicationsTable.classList.remove('hidden');
-  noApplicationsMessage.classList.add('hidden');
-  
-  // Add each application to table
-  apps.forEach(app => {
-    const row = document.createElement('tr');
-    
-    // Format dates
-    const applicationDate = new Date(app.applicationDate).toLocaleDateString();
-    const followUpDate = app.followUpDate ? new Date(app.followUpDate).toLocaleDateString() : 'N/A';
-    
-    // Create company cell with website link if available
-    let companyCell = app.company;
-    if (app.website) {
-      companyCell = `<a href="${app.website}" target="_blank" title="Visit company website">${app.company} <i class="fas fa-external-link-alt"></i></a>`;
-    }
-    
-    // Set row content
-    row.innerHTML = `
-      <td>${companyCell}</td>
-      <td>${app.jobTitle}</td>
-      <td>${applicationDate}</td>
-      <td>
-        <span class="status-badge status-${app.status.toLowerCase()}">${app.status}</span>
-      </td>
-      <td>${followUpDate}</td>
-      <td class="action-buttons">
-        <button class="action-btn edit-btn" data-id="${app._id}" title="Edit">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="action-btn delete-btn" data-id="${app._id}" title="Delete">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      </td>
-    `;
-    
-    applicationsBody.appendChild(row);
-  });
-  // Load all applications
-  async function loadApplications() {
-    try {
-      const response = await fetch('/api/applications');
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.msg || 'Failed to load applications');
-      }
-      
-      applications = await response.json();
-      
-      // Render applications to table
-      renderApplications(applications);
-      
-      // Make sure status counts are updated
-      updateStatusCounts(applications);
-      
-    } catch (error) {
-      console.error('Error loading applications:', error);
-      // Initialize with empty array if error occurs
-      updateStatusCounts([]);
-    }
-  }
-  // Add event listeners to edit and delete buttons
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
-  });
-  
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', () => openDeleteModal(btn.dataset.id));
-  });
-  
-  // Update status summary counts
-  updateStatusCounts(apps);
 }
 
 // Event Listeners
