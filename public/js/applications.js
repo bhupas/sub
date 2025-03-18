@@ -302,6 +302,7 @@ async function deleteApplication() {
 }
 
 // Filter applications
+// Filter applications
 async function filterApplications() {
   const company = searchCompanyInput.value.trim();
   const status = statusFilter.value;
@@ -325,10 +326,103 @@ async function filterApplications() {
     
     // Update applications array and render
     applications = filteredApplications;
-    renderApplications(applications);
+    renderApplications(filteredApplications);
+    
+    // Make sure status counts are updated with the filtered results
+    updateStatusCounts(filteredApplications);
   } catch (error) {
     console.error('Error filtering applications:', error);
   }
+}
+
+// Render applications to table
+function renderApplications(apps) {
+  // Clear table body
+  applicationsBody.innerHTML = '';
+  
+  if (apps.length === 0) {
+    // Show no applications message
+    applicationsTable.classList.add('hidden');
+    noApplicationsMessage.classList.remove('hidden');
+    // Update status counts even when no applications
+    updateStatusCounts([]);
+    return;
+  }
+  
+  // Show table, hide message
+  applicationsTable.classList.remove('hidden');
+  noApplicationsMessage.classList.add('hidden');
+  
+  // Add each application to table
+  apps.forEach(app => {
+    const row = document.createElement('tr');
+    
+    // Format dates
+    const applicationDate = new Date(app.applicationDate).toLocaleDateString();
+    const followUpDate = app.followUpDate ? new Date(app.followUpDate).toLocaleDateString() : 'N/A';
+    
+    // Create company cell with website link if available
+    let companyCell = app.company;
+    if (app.website) {
+      companyCell = `<a href="${app.website}" target="_blank" title="Visit company website">${app.company} <i class="fas fa-external-link-alt"></i></a>`;
+    }
+    
+    // Set row content
+    row.innerHTML = `
+      <td>${companyCell}</td>
+      <td>${app.jobTitle}</td>
+      <td>${applicationDate}</td>
+      <td>
+        <span class="status-badge status-${app.status.toLowerCase()}">${app.status}</span>
+      </td>
+      <td>${followUpDate}</td>
+      <td class="action-buttons">
+        <button class="action-btn edit-btn" data-id="${app._id}" title="Edit">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="action-btn delete-btn" data-id="${app._id}" title="Delete">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    `;
+    
+    applicationsBody.appendChild(row);
+  });
+  // Load all applications
+  async function loadApplications() {
+    try {
+      const response = await fetch('/api/applications');
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || 'Failed to load applications');
+      }
+      
+      applications = await response.json();
+      
+      // Render applications to table
+      renderApplications(applications);
+      
+      // Make sure status counts are updated
+      updateStatusCounts(applications);
+      
+    } catch (error) {
+      console.error('Error loading applications:', error);
+      // Initialize with empty array if error occurs
+      updateStatusCounts([]);
+    }
+  }
+  // Add event listeners to edit and delete buttons
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+  });
+  
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => openDeleteModal(btn.dataset.id));
+  });
+  
+  // Update status summary counts
+  updateStatusCounts(apps);
 }
 
 // Event Listeners

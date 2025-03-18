@@ -149,7 +149,8 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
       return res.status(401).json({ msg: 'Not authorized' });
     }
     
-    await application.remove();
+    // Use findByIdAndDelete instead of remove()
+    await Application.findByIdAndDelete(req.params.id);
     res.json({ msg: 'Application removed' });
   } catch (err) {
     console.error(err.message);
@@ -159,7 +160,6 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-
 // @route   GET /api/applications/filter
 // @desc    Filter applications by status or company
 // @access  Private
