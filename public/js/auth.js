@@ -38,6 +38,11 @@ registerForm.addEventListener('submit', async (e) => {
   try {
     registerError.textContent = '';
     
+    // Validate input on client side
+    if (!name || !email || !password) {
+      throw new Error('Please fill in all fields');
+    }
+    
     const response = await fetch('/api/users/register', {
       method: 'POST',
       headers: {
@@ -46,11 +51,20 @@ registerForm.addEventListener('submit', async (e) => {
       body: JSON.stringify({ name, email, password })
     });
     
-    const data = await response.json();
-    
+    // Check if response is ok before trying to parse JSON
     if (!response.ok) {
-      throw new Error(data.msg || 'Registration failed');
+      const errorText = await response.text();
+      try {
+        // Try to parse as JSON
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.msg || 'Registration failed');
+      } catch (jsonError) {
+        // If can't parse as JSON, use text or default message
+        throw new Error(errorText || 'Registration failed. Server returned an invalid response.');
+      }
     }
+    
+    const data = await response.json();
     
     // Store user in localStorage
     localStorage.setItem('user', JSON.stringify(data));
@@ -70,6 +84,7 @@ registerForm.addEventListener('submit', async (e) => {
     }
   } catch (error) {
     registerError.textContent = error.message;
+    console.error('Registration error:', error);
   }
 });
 
@@ -83,6 +98,11 @@ loginForm.addEventListener('submit', async (e) => {
   try {
     loginError.textContent = '';
     
+    // Validate input
+    if (!email || !password) {
+      throw new Error('Please fill in all fields');
+    }
+    
     const response = await fetch('/api/users/login', {
       method: 'POST',
       headers: {
@@ -91,11 +111,20 @@ loginForm.addEventListener('submit', async (e) => {
       body: JSON.stringify({ email, password })
     });
     
-    const data = await response.json();
-    
+    // Check if response is ok before trying to parse JSON
     if (!response.ok) {
-      throw new Error(data.msg || 'Login failed');
+      const errorText = await response.text();
+      try {
+        // Try to parse as JSON
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.msg || 'Login failed');
+      } catch (jsonError) {
+        // If can't parse as JSON, use text or default message
+        throw new Error(errorText || 'Login failed. Server returned an invalid response.');
+      }
     }
+    
+    const data = await response.json();
     
     // Store user in localStorage
     localStorage.setItem('user', JSON.stringify(data));
@@ -115,6 +144,7 @@ loginForm.addEventListener('submit', async (e) => {
     }
   } catch (error) {
     loginError.textContent = error.message;
+    console.error('Login error:', error);
   }
 });
 
@@ -124,8 +154,18 @@ logoutBtn.addEventListener('click', async () => {
     const response = await fetch('/api/users/logout');
     
     if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.msg || 'Logout failed');
+      const errorText = await response.text();
+      let errorMessage = 'Logout failed';
+      
+      try {
+        const errorData = JSON.parse(errorText);
+        errorMessage = errorData.msg || errorMessage;
+      } catch (e) {
+        // If parsing fails, use the error text
+        errorMessage = errorText || errorMessage;
+      }
+      
+      throw new Error(errorMessage);
     }
     
     // Clear localStorage
@@ -142,6 +182,7 @@ logoutBtn.addEventListener('click', async () => {
     registerError.textContent = '';
   } catch (error) {
     console.error('Logout error:', error);
+    alert('Error during logout: ' + error.message);
   }
 });
 
